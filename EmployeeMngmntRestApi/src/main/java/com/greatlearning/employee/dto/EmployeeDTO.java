@@ -1,32 +1,23 @@
-package com.greatlearning.employee.model;
+package com.greatlearning.employee.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-@Entity
-public class Employee {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EmployeeDTO {
 	private Long id;
 	private String firstName;
 	private String lastName;
 	private String email;
 
-	// Constructors, getters, and setters
-
-	public Employee() {
+	public EmployeeDTO() {
 		// Default constructor
 	}
 
-	public Employee(String firstName, String lastName, String email) {
+	public EmployeeDTO(Long id, String firstName, String lastName, String email) {
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 	}
 
-	// Getter and setter methods for each field
+	// Getters and setters for all fields
 
 	public Long getId() {
 		return id;

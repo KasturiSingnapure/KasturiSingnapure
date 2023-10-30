@@ -1,70 +1,62 @@
 package com.greatlearning.employee.controller;
 
-import java.util.List;
-import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greatlearning.employee.model.Employee;
 import com.greatlearning.employee.service.EmployeeService;
 
 @RestController
+@RequestMapping("/api/employees")
 public class EmployeeController {
-	
-	static final Logger logger  = LogManager.getLogger(EmployeeController.class.getName());
 
-	@Autowired
-	private EmployeeService employeeService;
-	
-	// displaying list of all employees
-	@GetMapping("/employees")
-	public List<Employee> getAllEmployee(){
-		return employeeService.getAllEmployees();
-	}
+    @Autowired
+    private EmployeeService employeeService;
 
-	// displaying employee by id
-	@GetMapping("/employees/{id}")
-	public Optional<Employee> getEmployee(@PathVariable int id){
-		return employeeService.getEmployee(id);
-	}
-	
-	// inserting employee
-	@PostMapping("/employees")
-	public void addEmployees(@RequestBody Employee employee){
-		employeeService.addEmployee(employee);
-	}
+    @GetMapping
+    public List<Employee> listEmployees() {
+        return employeeService.getAllEmployees();
+    }
 
-	//updating employee by id
-	@PutMapping("/employees/{id}")
-	public void updateEmployee(@RequestBody Employee e, @PathVariable int id){
-		employeeService.updateEmployee(e, id);
-	}
-	
-	// deleting all employees
-	@DeleteMapping("/employees")
-	public void deleteAllEmployees(){
-		employeeService.deleteAllEmployees();
-	}
+    @GetMapping("/{id}")
+    public Employee getEmployeeById(@PathVariable Long id) {
+        return employeeService.getEmployeeById(id);
+    }
 
-	// deleting employee by id
-	@DeleteMapping("employees/{id}")
-	public void deleteEmployeeByID(@RequestBody Employee e, @PathVariable int id){
-		employeeService.deleteEmployeeByID(id);
-	}
+    @PostMapping
+    public Employee addEmployee(@RequestBody Employee employee) {
+        return employeeService.addEmployee(employee);
+    }
 
-	// updating/ patching employee by id
-	@PatchMapping("employees/{id}")
-	public void patchEmployeeByID(@RequestBody Employee e, @PathVariable int id) {
-		employeeService.patchEmployee(e, id);
-	}
+    @PutMapping("/{id}")
+    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
+        return employeeService.updateEmployee(id, employee);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+        return "Deleted employee id - " + id;
+    }
+
+    @GetMapping("/search/{firstName}")
+    public List<Employee> searchEmployees(@PathVariable String firstName) {
+        return employeeService.searchEmployeesByFirstName(firstName);
+    }
+
+    @GetMapping("/sort")
+    public List<Employee> sortEmployees(@RequestParam String order) {
+        return employeeService.sortEmployeesByFirstName(order);
+    }
 }
